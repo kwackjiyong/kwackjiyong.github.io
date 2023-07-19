@@ -60,6 +60,7 @@
         let timer = setInterval(() => {
           excute.check()
           if (speed < 0) {
+            excute.finish()
             clearInterval(timer)
             isSpin = false
           } else {
@@ -76,6 +77,15 @@
           if (trueAngle >= ll * i && trueAngle < ll * (i + 1)) {
             ctx2.clearRect(0, 51, 600, 50)
             ctx2.strokeText(p, 275, 80, 50)
+          }
+        })
+      },
+      finish: () => {
+        const trueAngle = (angle - 90) % 360
+        const ll = 360 / player.length
+        player.forEach((p, i) => {
+          if (trueAngle >= ll * i && trueAngle < ll * (i + 1)) {
+            alert(p + '님이 당첨되셨어요')
           }
         })
       },
