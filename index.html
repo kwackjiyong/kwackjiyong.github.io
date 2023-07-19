@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>돌림판</title>
+</head>
+
+<body>
+</body>
+<script>
+  const op = (() => {
+    let cv = null
+    let cv2 = null
+    let ctx = null
+    let ctx2 = null
+    let ipt = null
+    let sp = null
+    const player = []
+    let isSpin = false
+    const cl = ['red', 'blue', 'purple', 'yellow', 'gray', 'green', 'orange', 'navy']
+    let fillColor = 0
+    let angle = 0
+    const handler = {
+      oninput: (e) => {
+        if (!isSpin && e.keyCode === 13) {
+          excute.add(e.currentTarget.value)
+          ipt.focus()
+        }
+      },
+      onLiClick: (e) => {
+        if (!isSpin) {
+          excute.remove(e.currentTarget.innerHTML)
+        }
+      },
+      onStartClick: (e) => {
+        if (!isSpin && player.length > 1) {
+          isSpin = true
+          excute.start()
+        }
+      },
+    }
+    //동작 실행부
+    const excute = {
+      add: (name) => {
+        if (name && !player.includes(name)) {
+          player.push(name)
+          excute.draw()
+        }
+      },
+      remove: (name) => {
+        if (player.includes(name)) {
+          player.splice(player.findIndex(v => v === name), 1)
+          excute.draw()
+        }
+      },
+      start: () => {
+        let speed = Math.floor(Math.random() * 3.6) + 10
+        let timer = setInterval(() => {
+          excute.check()
+          if (speed < 0) {
+            clearInterval(timer)
+            isSpin = false
+          } else {
+            angle += speed
+            speed -= 0.01
+            excute.spin()
+          }
+        }, 25)
+      },
+      check: () => {
+        const trueAngle = (angle - 90) % 360
+        const ll = 360 / player.length
+        player.forEach((p, i) => {
+          if (trueAngle >= ll * i && trueAngle < ll * (i + 1)) {
+            ctx2.clearRect(0, 51, 600, 50)
+            ctx2.strokeText(p, 275, 80, 50)
+          }
+        })
+      },
+      spin: () => {
+        cv.style.transform = `rotate(${angle}deg)`
+      },
+      rotate: (div) => {
+        ctx.rotate(2 * Math.PI / div)
+      },
+      stroke: () => {
+        ctx.beginPath()
+        ctx.moveTo(0, 0)
+        ctx.lineTo(300, 0)
+        ctx.stroke()
+      },
+      label: (name) => {
+        ctx.strokeText(name, 150, 0, 100)
+      },
+      fillChange: () => {
+        if (fillColor === 0) {
+          fillColor = cl.length - 1
+        } else {
+          fillColor--
+        }
+        ctx.fillStyle = cl[fillColor]
+        ctx.strokeStyle = cl[fillColor]
+      },
+      draw: () => {
+        excute.init()
+        if (player.length > 0) {
+          const ul = document.createElement('ul')
+          player.forEach(p => {
+            let li = document.createElement('li')
+            li.innerHTML = p
+            li.onclick = handler.onLiClick
+            ul.appendChild(li)
+            excute.fillChange()
+            excute.stroke()
+            excute.rotate(-player.length * 2)
+            excute.fillChange()
+            excute.label(p)
+            excute.rotate(-player.length * 2)
+            ctx.fill()
+          })
+          document.body.appendChild(ul)
+        }
+        ctx.beginPath()
+        excute.fillChange()
+        ctx.arc(0, 0, 10, 0, 2 * Math.PI)
+        ctx.fill()
+        angle = 90
+        excute.spin()
+      },
+      init: () => {
+        document.body.innerHTML = ''
+        const canvas = document.createElement('canvas')
+        canvas.id = 'opCanvas'
+        canvas.height = 600
+        canvas.width = 600
+        document.body.appendChild(canvas)
+        let context = canvas.getContext('2d')
+        context.translate(300, 300)
+        context.beginPath()
+        context.arc(0, 0, 300, 0, 2 * Math.PI)
+        context.stroke()
+        context.font = "20pt '맑은 고딕'"
+        if (player.length > 20) { context.font = "10pt '맑은 고딕'" }
+        cv = canvas
+        ctx = context
+
+        const canvas2 = document.createElement('canvas')
+        canvas2.id = 'opArrow'
+        canvas2.height = 100
+        canvas2.width = 600
+        document.body.appendChild(canvas2)
+        let context2 = canvas2.getContext('2d')
+        context2.beginPath()
+        context2.moveTo(300, 0)
+        context2.lineTo(350, 50)
+        context2.lineTo(250, 50)
+        context2.lineTo(300, 0)
+        context2.stroke()
+
+        context2.font = "15pt '맑은 고딕'"
+        cv2 = canvas2
+        ctx2 = context2
+
+        const input = document.createElement('input')
+        input.id = 'opInput'
+        input.type = 'text'
+        input.onkeypress = handler.oninput
+        ipt = input
+        document.body.appendChild(input)
+
+        const start = document.createElement('button')
+        start.id = 'opStart'
+        start.innerHTML = '돌리기'
+        start.onclick = handler.onStartClick
+        document.body.appendChild(start)
+      }
+
+    }
+    excute.init()
+    return { excute }
+  })()
+</script>
+
+</html>
