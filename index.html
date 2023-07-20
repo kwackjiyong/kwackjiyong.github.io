@@ -62,7 +62,7 @@
       },
       start: () => {
         excute.save()
-        let speed = Math.floor(Math.random() * 3.6) + 10
+        let speed = Math.floor((Math.random()+1) * 24)
         let timer = setInterval(() => {
           excute.check()
           if (speed < 0) {
@@ -71,7 +71,7 @@
             isSpin = false
           } else {
             angle += speed
-            speed -= 0.03
+            speed -= 0.1
             excute.spin()
           }
         }, 25)
