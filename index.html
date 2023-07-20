@@ -40,6 +40,11 @@
           excute.start()
         }
       },
+      onShakeClick: (e) => {
+        if (!isSpin && player.length > 1) {
+          excute.shake()
+        }
+      },
     }
     //동작 실행부
     const excute = {
@@ -98,6 +103,15 @@
             alert(p + '님이 당첨되셨어요')
           }
         })
+      },
+      shake: () => {
+        let cp = [...player]
+        let tmp =[]
+        while (cp.length > 0){
+          let idx = Math.floor(Math.random() * cp.length)
+          tmp.push(cp.splice(idx,1)[0])
+        }
+        excute.draw()
       },
       spin: () => {
         cv.style.transform = `rotate(${angle}deg)`
@@ -189,6 +203,7 @@
         input.id = 'opInput'
         input.type = 'text'
         input.style.width = '100%'
+        input.style.height = '30px'
         input.onkeypress = handler.oninput
         ipt = input
         document.body.appendChild(input)
@@ -196,9 +211,18 @@
         const start = document.createElement('button')
         start.id = 'opStart'
         start.innerHTML = '돌리기'
-        start.style.width = '100%'
+        start.style.width = '50%'
+        start.style.height = '50px'
         start.onclick = handler.onStartClick
         document.body.appendChild(start)
+        
+        const shake = document.createElement('button')
+        shake.id = 'opShake
+        shake.innerHTML = '섞기'
+        shake.style.width = '50%'
+        shake.style.height = '50px'
+        shake.onclick = handler.onShakeClick
+        document.body.appendChild(shake)
       }
 
     }
