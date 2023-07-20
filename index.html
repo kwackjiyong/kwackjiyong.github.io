@@ -111,6 +111,7 @@
           let idx = Math.floor(Math.random() * cp.length)
           tmp.push(cp.splice(idx,1)[0])
         }
+        player = [...tmp]
         excute.draw()
       },
       spin: () => {
