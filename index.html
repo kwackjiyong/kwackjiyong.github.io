@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ㅅ<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -20,6 +20,7 @@
     let player = []
     let isSpin = false
     const cl = ['red', 'blue', 'purple', 'gray', 'green', 'orange', 'navy']
+    const cafe = ['매머드','폴바셋','초콜렛','스타벅스']
     let fillColor = 0
     let angle = 0
     let speed = 0
@@ -106,7 +107,8 @@
         const ll = 360 / player.length
         player.forEach((p, i) => {
           if (trueAngle >= ll * i && trueAngle < ll * (i + 1)) {
-            alert(p + '님이 당첨되셨어요')
+            const idx = Math.floor(Math.random()*cafe.length)
+            alert(p + '님이 ' + cafe[idx] + '에 당첨되셨어요')
           }
         })
       },
