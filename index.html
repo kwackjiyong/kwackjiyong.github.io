@@ -22,6 +22,7 @@
     const cl = ['red', 'blue', 'purple', 'gray', 'green', 'orange', 'navy']
     let fillColor = 0
     let angle = 0
+    let speed = 0
     const handler = {
       oninput: (e) => {
         if (!isSpin && e.keyCode === 13) {
@@ -45,6 +46,11 @@
           excute.shake()
         }
       },
+      onSpinPannelClick: (e) => {
+        if (isSpin) {
+          speed = 0
+        }
+      },
     }
     //동작 실행부
     const excute = {
@@ -62,7 +68,7 @@
       },
       start: () => {
         excute.save()
-        let speed = Math.floor((Math.random()+1) * 24)
+        speed = Math.floor((Math.random()+1) * 24)
         let timer = setInterval(() => {
           excute.check()
           if (speed < 0) {
@@ -171,6 +177,7 @@
         canvas.height = 600
         canvas.width = 600
         canvas.style.width = '100%'
+        canvas.onclick = handler.onSpinPannelClick
         document.body.appendChild(canvas)
         let context = canvas.getContext('2d')
         context.translate(300, 300)
