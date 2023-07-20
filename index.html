@@ -17,7 +17,7 @@
     let ctx2 = null
     let ipt = null
     let sp = null
-    const player = []
+    let player = []
     let isSpin = false
     const cl = ['red', 'blue', 'purple', 'gray', 'green', 'orange', 'navy']
     let fillColor = 0
@@ -56,6 +56,7 @@
         }
       },
       start: () => {
+        excute.save()
         let speed = Math.floor(Math.random() * 3.6) + 10
         let timer = setInterval(() => {
           excute.check()
@@ -79,6 +80,15 @@
             ctx2.strokeText(p, 275, 80, 50)
           }
         })
+      },
+      save: () => {
+        localStorage.setItem('spin_player', JSON.stringify(player))
+      },
+      load: () => {
+        let sp = JSON.parse(localStorage.getItem('spin_player'))
+        if (sp !== null && sp.length > 1) {
+          player = sp
+        }
       },
       finish: () => {
         const trueAngle = (angle - 90) % 360
@@ -178,6 +188,7 @@
         const input = document.createElement('input')
         input.id = 'opInput'
         input.type = 'text'
+        input.style.width = '100%'
         input.onkeypress = handler.oninput
         ipt = input
         document.body.appendChild(input)
@@ -185,12 +196,14 @@
         const start = document.createElement('button')
         start.id = 'opStart'
         start.innerHTML = '돌리기'
+        start.style.width = '100%'
         start.onclick = handler.onStartClick
         document.body.appendChild(start)
       }
 
     }
-    excute.init()
+    excute.load()
+    excute.draw()
     return { excute }
   })()
 </script>
