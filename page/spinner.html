@@ -53,8 +53,10 @@
         }
       },
       onOutToggleClick: (e) => {
-        isOut = !isOut
-        e.currentTarget.innerHTML = isOut ? '걸린사람제외' : '걸리면당첨'
+        if(!isSpin){
+          isOut = !isOut
+          e.currentTarget.innerHTML = isOut ? '걸린사람제외' : '걸리면당첨'
+        }
       },
     }
     //동작 실행부
