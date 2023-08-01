@@ -19,8 +19,8 @@
     let sp = null
     let player = []
     let isSpin = false
+    let isOut = false
     const cl = ['red', 'blue', 'purple', 'gray', 'green', 'orange', 'navy']
-    const cafe = ['매머드', '폴바셋', '초콜렛', '스타벅스']
     let fillColor = 0
     let angle = 0
     let speed = 0
@@ -51,6 +51,10 @@
         if (isSpin && speed > 3) {
           speed = speed * 0.1 + 3 * Math.random()
         }
+      },
+      onOutToggleClick: (e) => {
+        isOut = !isOut
+        e.currentTarget.innerHTML = isOut ? '걸린사람제외' : '걸리면당첨'
       },
     }
     //동작 실행부
@@ -107,8 +111,12 @@
         const ll = 360 / player.length
         player.forEach((p, i) => {
           if (trueAngle >= ll * i && trueAngle < ll * (i + 1)) {
-            const idx = Math.floor(Math.random() * cafe.length)
-            alert(p + '님이 ' + cafe[idx] + '에 당첨되셨어요')
+            if (isOut){
+              alert(p + '님은 제외입니다.')
+              excute.remove(p)
+            } else {
+              alert(p + '님이 당첨되셨어요')
+            }
           }
         })
       },
@@ -223,8 +231,8 @@
         const start = document.createElement('button')
         start.id = 'opStart'
         start.innerHTML = '돌리기'
-        start.style.width = '50%'
-        start.style.height = '50px'
+        start.style.width = '100%'
+        start.style.height = '60px'
         start.onclick = handler.onStartClick
         document.body.appendChild(start)
 
@@ -235,6 +243,14 @@
         shake.style.height = '50px'
         shake.onclick = handler.onShakeClick
         document.body.appendChild(shake)
+        
+        const outToggle = document.createElement('button')
+        outToggle.id = 'opOutToggle'
+        outToggle.innerHTML = '걸린사람당첨'
+        outToggle.style.width = '50%'
+        outToggle.style.height = '50px'
+        outToggle.onclick = handler.onOutToggleClick
+        document.body.appendChild(outToggle)
       }
 
     }
